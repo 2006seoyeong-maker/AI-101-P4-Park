@@ -1,0 +1,42 @@
+# Physics Ball: Dead Road
+
+## Project Overview
+Physics Ball: Dead Road is a browser-based endless zombie survival game created for AI 101 Project 4.
+
+The player controls a rolling ball on an endless road, defeats approaching zombies through collisions, and avoids obstacles to survive.
+
+## How to Run
+1. Open the `build` folder.
+2. Double-click `index.html`.
+3. Play the game in Chrome or Microsoft Edge.
+
+No installation or external libraries are required.
+
+## Controls
+- Space: Charge and launch the ball.
+- Arrow Keys: Control movement.
+- R: Restart the game.
+
+## Main Features
+- Endless road gameplay.
+- Continuous forward movement after launch.
+- Approaching zombie enemies.
+- Collision-based attacks.
+- Road obstacles.
+- Survival energy system.
+- Kill and distance tracking.
+
+## Out of Scope
+- Multiplayer.
+- Online accounts.
+- Leaderboards.
+- Realistic 3D zombie models.
+- Advanced physics simulation.
+
+## Known Limitations
+- Zombie visuals are simplified rather than photorealistic.
+- Physics behavior is approximate.
+- Gameplay difficulty and balance may need additional testing.
+
+## AI Use
+ChatGPT assisted with planning, documentation, and generating the game code. The student selected the concept, made design decisions, and evaluated the game through testing.

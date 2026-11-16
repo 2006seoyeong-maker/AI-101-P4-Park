@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PHYSICS BALL · DEAD ROAD</title>
+<style>
+:root{--lime:#d6fa66;--ink:#091019;--muted:#a7b3bd;--red:#ff705e;--white:#f6f8f4}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#0b111a;color:var(--white);font-family:Inter,Segoe UI,Arial,sans-serif}
+#game{display:block;width:100vw;height:100vh;touch-action:none}
+.vignette{pointer-events:none;position:absolute;inset:0;background:radial-gradient(ellipse at 50% 48%,transparent 26%,#060b14b5 105%);mix-blend-mode:multiply}
+.hud{pointer-events:none;position:absolute;inset:0;display:flex;flex-direction:column;padding:22px clamp(16px,3vw,44px) 18px;gap:12px;text-shadow:0 2px 12px #0008}
+.top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}.brand{display:flex;align-items:center;gap:12px}
+.emblem{height:42px;width:42px;border:2px solid var(--lime);border-radius:12px;display:grid;place-items:center;font-size:22px;transform:rotate(-8deg);color:var(--lime);font-weight:900;box-shadow:0 0 30px #d6fa6627}
+.brand strong{font-size:24px;line-height:1.05;display:block;font-weight:950;letter-spacing:.09em;font-stretch:condensed}.brand small{display:block;color:var(--lime);letter-spacing:.24em;text-transform:uppercase;font-size:10px;margin-top:7px;font-weight:900}
+.statline{display:flex;gap:10px}.stat{min-width:108px;border:1px solid #ffffff22;border-top:2px solid #d6fa6685;border-radius:10px;background:linear-gradient(160deg,#0c151cd9,#111d25b8);padding:9px 16px;text-align:center;backdrop-filter:blur(5px)}
+.stat .k{font-size:10px;color:#bcc9c3;font-weight:800;letter-spacing:.17em}.stat .v{display:block;font-size:24px;margin-top:3px;font-weight:950;font-variant-numeric:tabular-nums}.stat .v b{font-size:11px;color:#aab9b7}
+.status{font-size:10px;color:#d6fa66;letter-spacing:.21em;font-weight:850;align-self:center;background:#0b151ac4;border:1px solid #d6fa6640;padding:8px 15px;border-radius:40px}
+.spacer{flex:1}.bottom{display:flex;align-items:end;gap:18px;justify-content:space-between}.health{width:min(390px,45vw);background:#091219de;border:1px solid #ffffff26;border-radius:14px;padding:14px 18px;backdrop-filter:blur(8px)}
+.healthhead{display:flex;align-items:center;justify-content:space-between;font-size:11px;letter-spacing:.15em;font-weight:850}.healthhead span:last-child{font-size:18px;color:var(--lime);font-variant-numeric:tabular-nums}
+.track{margin-top:10px;height:12px;background:#242f30;border-radius:100px;overflow:hidden;border:1px solid #65736b50}
+#healthfill{width:100%;height:100%;background:linear-gradient(90deg,#a5e742,#e5f47c);box-shadow:0 0 20px #cfff61aa;transition:width .15s linear,background .2s}
+.subline{font-size:10px;color:#b9c6bc;margin-top:9px;letter-spacing:.06em}.control{background:#091219d9;border:1px solid #ffffff28;border-radius:14px;padding:14px 18px;min-width:285px;text-align:right;backdrop-filter:blur(8px)}
+.control b{color:#d6fa66;letter-spacing:.1em;font-size:12px}.control p{margin:8px 0 0;color:#b8c4c8;font-size:11px;line-height:1.7}
+kbd{display:inline-block;border:1px solid #bdc8c35c;background:#242f32;border-bottom:2px solid #dbe9dc63;padding:2px 5px;border-radius:4px;color:#f6f6f2;font-size:11px;font-family:inherit;font-weight:800}
+#powerwrap{position:absolute;left:50%;bottom:calc(16% + 10px);transform:translateX(-50%);width:min(320px,55vw);text-align:center;pointer-events:none;opacity:0;transition:opacity .14s}
+#powerlabel{font-size:13px;letter-spacing:.18em;font-weight:950;color:white;margin-bottom:10px}
+.powertrack{height:15px;border:2px solid #e7f0eb4f;background:#0e1b20cc;border-radius:20px;overflow:hidden}#powerfill{height:100%;width:0;background:linear-gradient(90deg,#b7f06c,#f4da64,#ff9469)}
+#center{pointer-events:none;position:absolute;top:47%;left:50%;transform:translate(-50%,-50%);width:min(560px,calc(100% - 30px));text-align:center;background:linear-gradient(180deg,#0c171de8,#09131eea);border:1px solid #d6fa666e;border-top:3px solid var(--lime);border-radius:20px;padding:27px 30px 25px;box-shadow:0 26px 80px #000b;backdrop-filter:blur(10px)}
+#center[hidden]{display:none}#center .eyebrow{font-size:10px;color:var(--lime);font-weight:900;letter-spacing:.38em}#center h1{font-size:clamp(37px,5vw,65px);line-height:.97;letter-spacing:-.035em;font-weight:1000;margin:12px 0 12px;text-transform:uppercase}#center h1 span{color:var(--lime)}#center p{margin:0 auto;color:#c4d0d1;max-width:420px;font-size:14px;line-height:1.6}#center .bigkey{display:inline-block;margin-top:18px;background:var(--lime);color:#15201b;border-radius:6px;padding:11px 22px;font-size:12px;font-weight:1000;letter-spacing:.14em}#center .caption{color:#85999b;font-size:10px;letter-spacing:.12em;margin-top:16px}
+#flash{pointer-events:none;position:absolute;inset:0;opacity:0;background:radial-gradient(ellipse,#ff704800 25%,#ff574768 100%)}
+#toast{pointer-events:none;position:absolute;left:50%;top:27%;transform:translateX(-50%);font-size:28px;letter-spacing:.04em;font-weight:1000;color:var(--lime);text-shadow:0 3px 13px #000,0 0 28px #deff5b88;opacity:0;text-align:center;white-space:nowrap}
+@media(max-width:700px){.hud{padding:12px}.brand strong{font-size:15px}.brand small{font-size:8px}.emblem{height:33px;width:33px;font-size:15px}.statline{gap:5px}.stat{min-width:65px;padding:6px 8px}.stat .k{font-size:8px}.stat .v{font-size:17px}.stat .v b{font-size:8px}.control{display:none}.health{width:100%;}.status{display:none}#center{padding:21px 16px}#center p{font-size:12px}#center h1{font-size:40px}}
+</style>
+</head>
+<body>
+<canvas id="game" aria-label="Endless zombie road survival game with ball in third-person perspective"></canvas>
+<div class="vignette"></div><div id="flash"></div><div id="toast"></div>
+<div class="hud"><div class="top"><div class="brand"><div class="emblem">◉</div><div><strong>PHYSICS BALL</strong><small>DEAD ROAD / Endless survival</small></div></div>
+<div class="statline"><div class="stat"><span class="k">KILLS</span><span class="v" id="kills">0</span></div><div class="stat"><span class="k">DISTANCE</span><span class="v"><span id="distance">0</span><b> m</b></span></div><div class="stat"><span class="k">COMBO</span><span class="v" id="combo">x1</span></div></div></div>
+<div class="status" id="state">AWAITING LAUNCH</div><div class="spacer"></div>
+<div class="bottom"><div class="health"><div class="healthhead"><span>SURVIVAL ENERGY</span><span id="healthtext">100%</span></div><div class="track"><div id="healthfill"></div></div><div class="subline">ENERGY DRAINS OVER TIME · SMASH ZOMBIES TO REFILL</div></div><div class="control"><b id="speed">0 KM/H</b><p><kbd>←</kbd><kbd>→</kbd> STEER &nbsp; <kbd>↑</kbd><kbd>↓</kbd> SPEED<br><kbd>P</kbd> PAUSE &nbsp; <kbd>R</kbd> RESTART</p></div></div>
+</div>
+<div id="powerwrap"><div id="powerlabel">CHARGE YOUR LAUNCH · 0%</div><div class="powertrack"><div id="powerfill"></div></div></div>
+<div id="center"><div class="eyebrow">ONE ROAD. NO FINISH LINE.</div><h1>DEAD <span>ROAD</span></h1><p>Launch your ball into an endless highway. Zombies rush straight at you. <strong>Smash them to restore energy</strong>, weave around wrecks, and keep rolling. Stop collecting kills and you die.</p><div class="bigkey">HOLD SPACE → RELEASE TO LAUNCH</div><div class="caption">ARROWS TO STEER · R TO RESET · P TO PAUSE</div></div>
+<script>
+'use strict';
+// Original, offline-only single-file game. Graphics are drawn directly on Canvas.
+const canvas=document.getElementById('game'),g=canvas.getContext('2d');
+const ui={center:document.getElementById('center'),powerwrap:document.getElementById('powerwrap'),powerfill:document.getElementById('powerfill'),powerlabel:document.getElementById('powerlabel'),health:document.getElementById('healthfill'),healthtext:document.getElementById('healthtext'),kills:document.getElementById('kills'),distance:document.getElementById('distance'),combo:document.getElementById('combo'),speed:document.getElementById('speed'),state:document.getElementById('state'),flash:document.getElementById('flash'),toast:document.getElementById('toast')};
+const input=new Set();let W=1280,H=720,dpr=1,prev=0,clock=0,seed=927312,phase='ready',energy=100,power=0,charging=false,elapsed=0,dist=0,kills=0,combo=0,comboTime=0,spawnTimer=0.7,shake=0,flash=0,toastTime=0,toasty='',world=[],effects=[],pausedFrom='running';
+const ROAD=5.1,MAXX=4.33,RADIUS=.85;
+const player={x:0,z:0,y:RADIUS,vx:0,vz:0,spin:0,charge:0};
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+function rand(){seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296}
+function between(a,b){return a+rand()*(b-a)}
+function choose(arr){return arr[Math.floor(rand()*arr.length)]}
+function reset(){seed=927312;phase='ready';energy=100;power=0;charging=false;elapsed=0;dist=0;kills=0;combo=0;comboTime=0;spawnTimer=.6;shake=flash=toastTime=0;world=[];effects=[];player.x=0;player.z=0;player.y=RADIUS;player.vx=0;player.vz=0;player.spin=0;input.clear();
+  // First zombies are deliberately placed where the player can see how the game works.
+  world.push({type:'zombie',x:0,z:37,variant:0,wiggle:0,step:0,dead:false,speed:between(2,3)});
+  world.push({type:'zombie',x:-2.65,z:56,variant:1,wiggle:1.5,step:1.2,dead:false,speed:between(2,3)});
+  world.push({type:'barricade',x:2.6,z:74,hit:false,variant:0});
+  for(let i=0;i<8;i++)spawnAt(85+i*13);
+  ui.center.hidden=false;ui.center.innerHTML='<div class="eyebrow">ONE ROAD. NO FINISH LINE.</div><h1>DEAD <span>ROAD</span></h1><p>Launch your ball into an endless highway. Zombies rush straight at you. <strong>Smash them to restore energy</strong>, dodge wrecks, and keep rolling. Your ball never stops unless the run ends.</p><div class="bigkey">HOLD SPACE → RELEASE TO LAUNCH</div><div class="caption">ARROWS TO STEER · R TO RESET · P TO PAUSE</div>';
+  ui.powerwrap.style.opacity='0';ui.state.textContent='AWAITING LAUNCH';syncUI();}
+function spawnAt(z){const lane=choose([-2.85,0,2.85]);const r=rand();if(r<.70){world.push({type:'zombie',x:lane+between(-.37,.37),z,variant:Math.floor(rand()*4),wiggle:rand()*5,step:rand()*8,dead:false,speed:between(2.2,4.8)});if(rand()<.27)world.push({type:'zombie',x:lane===0?choose([-2.6,2.6]):0,z:z+between(1,3.8),variant:Math.floor(rand()*4),wiggle:rand()*5,step:rand()*8,dead:false,speed:between(2.2,4.4)});}else{world.push({type:choose(['barricade','cone','car']),x:lane,z,hit:false,variant:Math.floor(rand()*3)});}}
+function launch(){if(phase!=='ready'||!charging)return;phase='running';charging=false;player.vz=17+power*.14;ui.center.hidden=true;ui.powerwrap.style.opacity='0';ui.state.textContent='SURVIVE THE HIGHWAY';showToast('KEEP MOVING · KEEP KILLING',1.45);}
+function showToast(message,seconds=1){toasty=message;toastTime=seconds;ui.toast.textContent=message;}
+function endGame(){phase='dead';ui.state.textContent='RUN ENDED';ui.center.hidden=false;ui.center.innerHTML='<div class="eyebrow">THE ROAD CLAIMED ANOTHER RUN</div><h1>GAME <span>OVER</span></h1><p>You rolled <strong>'+Math.floor(dist)+' meters</strong> and crushed <strong>'+kills+' zombies</strong>. You must keep collecting zombie kills to survive. Avoid the wrecks, and watch your energy.</p><div class="bigkey">PRESS R TO TRY AGAIN</div><div class="caption">NO FINISH LINE · CHASE YOUR RECORD</div>';}
+function makeBurst(x,z,kind){for(let i=0;i<13;i++){let a=rand()*Math.PI*2;effects.push({type:'particle',x,z,y:between(.5,2),vx:Math.cos(a)*between(1,5),vy:between(1,5),vz:Math.sin(a)*between(1,5),life:between(.45,.95),max:1,color:kind==='zombie'?choose(['#d8fc70','#a7d869','#ffd966']):choose(['#ff8260','#f6a150','#f6efcf'])});}}
+function syncUI(){ui.kills.textContent=kills;ui.distance.textContent=Math.floor(dist);ui.combo.textContent='x'+Math.max(1,combo);ui.speed.textContent=Math.round(player.vz*3.6)+' KM/H';ui.health.style.width=clamp(energy,0,100)+'%';ui.health.style.background=energy<28?'linear-gradient(90deg,#f44355,#ffb17a)':'linear-gradient(90deg,#a5e742,#e5f47c)';ui.healthtext.textContent=Math.ceil(clamp(energy,0,100))+'%';ui.healthtext.style.color=energy<28?'#ff816a':'#d6fa66';ui.powerfill.style.width=power+'%';ui.powerlabel.textContent='CHARGE YOUR LAUNCH · '+Math.round(power)+'%';ui.flash.style.opacity=flash*.7;ui.toast.style.opacity=clamp(toastTime*1.7,0,1);}
+function update(dt){clock+=dt;flash=Math.max(0,flash-dt*2.7);shake=Math.max(0,shake-dt*16);toastTime=Math.max(0,toastTime-dt);if(phase==='ready'){if(charging){power=clamp(power+dt*57,0,100);ui.powerwrap.style.opacity='1';}syncUI();return;}if(phase!=='running'){syncUI();return;}
+  elapsed+=dt;const side=(input.has('ArrowRight')?1:0)-(input.has('ArrowLeft')?1:0);const boost=(input.has('ArrowUp')?1:0)-(input.has('ArrowDown')?1:0);
+  player.vx+=side*22*dt;player.vx*=Math.exp(-3.6*dt);player.vx=clamp(player.vx,-8,8);player.x+=player.vx*dt;
+  if(player.x>MAXX||player.x< -MAXX){player.x=clamp(player.x,-MAXX,MAXX);player.vx*=-.2;}
+  let target=20+Math.min(10,elapsed*.12)+boost*4;player.vz+=((target-player.vz)*1.55)*dt;player.vz=clamp(player.vz,11,33);player.z+=player.vz*dt;player.spin+=(player.vz/RADIUS)*dt;dist=player.z;
+  // Zombies are the survival resource. Without kills the energy always depletes.
+  energy-=dt*(6.5+Math.min(3,elapsed*.025));comboTime=Math.max(0,comboTime-dt);if(comboTime<=0)combo=0;
+  spawnTimer-=dt;while(spawnTimer<=0){const furthest=Math.max(player.z+90,...world.map(e=>e.z));spawnAt(furthest+between(8,20));spawnTimer+=between(.66,1.12)*Math.max(.59,1-elapsed*.003);}
+  for(const e of world){if(e.dead||e.hit)continue;
+    if(e.type==='zombie'){e.step+=dt*(8+e.speed);e.z-=e.speed*dt; // Staggering, oncoming creatures track the ball a little.
+      e.x=clamp(e.x+clamp(player.x-e.x,-.85,.85)*dt*.42,-MAXX,MAXX);
+      if(Math.abs(e.z-player.z)<1.65&&Math.abs(e.x-player.x)<1.12){e.dead=true;kills++;combo++;comboTime=3.2;energy=clamp(energy+16.5,0,100);player.vz=Math.min(33,player.vz+1.0);makeBurst(e.x,e.z,'zombie');showToast('ZOMBIE CRUSH  +16 ENERGY'+(combo>1?'  ·  '+combo+'x COMBO':''),.83);}}
+    else if(Math.abs(e.z-player.z)<1.42&&Math.abs(e.x-player.x)<(e.type==='car'?1.75:1.2)){e.hit=true;const harm=e.type==='car'?36:e.type==='barricade'?27:15;energy-=harm;player.vz=Math.max(11,player.vz*.68);player.vx+=player.x>e.x?3:-3;shake=e.type==='car'?18:11;flash=.8;makeBurst(e.x,e.z,'hazard');combo=0;comboTime=0;showToast('COLLISION · -'+harm+' ENERGY',1.05);}
+  }
+  world=world.filter(e=>e.z>player.z-24&&!((e.dead||e.hit)&&e.z<player.z-5));
+  for(const p of effects){p.life-=dt;p.vy-=10*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.z+=p.vz*dt;}effects=effects.filter(e=>e.life>0);
+  if(energy<=0){energy=0;endGame();}syncUI();}
+function resize(){W=innerWidth;H=innerHeight;dpr=Math.min(2,devicePixelRatio||1);canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);g.setTransform(dpr,0,0,dpr,0,0);}addEventListener('resize',resize);resize();
+function camera(){let from={x:player.x*.82,y:4.05,z:player.z-12.2},to={x:player.x*.83,y:1.6,z:player.z+22};let f=unit(sub(to,from)),r=unit({x:f.z,y:0,z:-f.x}),u=cross(f,r);return {from,f,r,u,foc:Math.min(W*1.14,H*1.42)};}
+function sub(a,b){return{x:a.x-b.x,y:a.y-b.y,z:a.z-b.z}}function dot(a,b){return a.x*b.x+a.y*b.y+a.z*b.z}function unit(a){let m=Math.hypot(a.x,a.y,a.z)||1;return{x:a.x/m,y:a.y/m,z:a.z/m}}function cross(a,b){return{x:a.y*b.z-a.z*b.y,y:a.z*b.x-a.x*b.z,z:a.x*b.y-a.y*b.x}}
+function project(x,y,z,c){let q={x:x-c.from.x,y:y-c.from.y,z:z-c.from.z},depth=dot(q,c.f);if(depth<.3)return null;return{x:W*.5+dot(q,c.r)*c.foc/depth,y:H*.485-dot(q,c.u)*c.foc/depth,scale:c.foc/depth,depth};}
+function polygon(pts,fill,stroke=null,lw=1){if(pts.some(p=>!p))return;g.beginPath();pts.forEach((p,i)=>i?g.lineTo(p.x,p.y):g.moveTo(p.x,p.y));g.closePath();g.fillStyle=fill;g.fill();if(stroke){g.strokeStyle=stroke;g.lineWidth=lw;g.stroke();}}
+function quad(c,x0,x1,z0,z1,y,color){polygon([project(x0,y,z0,c),project(x1,y,z0,c),project(x1,y,z1,c),project(x0,y,z1,c)],color)}
+function line3(c,a,b,color,lw){let p=project(...a,c),q=project(...b,c);if(!p||!q)return;g.beginPath();g.moveTo(p.x,p.y);g.lineTo(q.x,q.y);g.strokeStyle=color;g.lineWidth=lw;g.stroke()}
+function background(){let h=H*.52;let sky=g.createLinearGradient(0,0,0,h);sky.addColorStop(0,'#111927');sky.addColorStop(.45,'#34404a');sky.addColorStop(.82,'#655647');sky.addColorStop(1,'#bf7452');g.fillStyle=sky;g.fillRect(0,0,W,H);let bloom=g.createRadialGradient(W*.69,h*.82,4,W*.69,h*.82,W*.4);bloom.addColorStop(0,'#ef98604b');bloom.addColorStop(1,'#ef986000');g.fillStyle=bloom;g.fillRect(0,0,W,H);g.fillStyle='#1d2a32';
+  // Distant urban skyline, deterministic and independent of frame rate.
+  for(let i=0;i<42;i++){let p=(i/42)*W;let hi=(24+((i*13)%67))*(H/720);let w=W/38;g.fillStyle=i%3?'#303844':'#273441';g.fillRect(p,H*.47-hi,w,hi+20);if(i%4===0){g.fillStyle='#df9a5b33';for(let j=0;j<3;j++)g.fillRect(p+7,H*.47-hi+8+j*11,3,4);}}
+  let haze=g.createLinearGradient(0,H*.39,0,H);haze.addColorStop(0,'#6c655000');haze.addColorStop(.48,'#16242720');haze.addColorStop(1,'#071018');g.fillStyle=haze;g.fillRect(0,H*.39,W,H);}
+function drawRoad(c){let start=Math.floor((player.z-8)/8)*8;quad(c,-240,240,start,player.z+300,-.065,'#202a2d');for(let z=start+272;z>=start;z-=8){quad(c,-ROAD,ROAD,z,z+8,0,(Math.floor(z/8)%2===0?'#373a3c':'#34383b'));quad(c,-6.45,-ROAD,z,z+8,.015,'#5f5a50');quad(c,ROAD,6.45,z,z+8,.015,'#5f5a50');quad(c,-ROAD,-ROAD+.14,z,z+8,.03,'#f9dca7');quad(c,ROAD-.14,ROAD,z,z+8,.03,'#f9dca7');}
+  for(let z=Math.floor(player.z/12)*12-12;z<player.z+285;z+=12){for(const x of [-1.72,1.72])quad(c,x-.07,x+.07,z,z+5,.055,'#b4b0a4d5');}
+  for(let z=Math.floor(player.z/17)*17;z<player.z+250;z+=17){let x=Math.sin(z*.47)*3.4;line3(c,[x-.55,.06,z],[x+.9,.06,z+1.9],'#1c2426a8',Math.max(1,2));}
+  // Dark roadside posts and street lights build a highway setting.
+  for(let z=Math.floor((player.z-15)/26)*26+260;z>=player.z-18;z-=26){for(let s of [-1,1]){let x=s*7.3;let foot=project(x,0,z,c),tip=project(x,8,z,c),arm=project(x-s*1.15,7.9,z,c);if(!foot||!tip||!arm)continue;g.lineWidth=Math.max(1.5,Math.min(8,foot.scale*.11));g.strokeStyle='#121c20';g.beginPath();g.moveTo(foot.x,foot.y);g.lineTo(tip.x,tip.y);g.lineTo(arm.x,arm.y);g.stroke();g.fillStyle='#f0c78788';g.beginPath();g.arc(arm.x,arm.y,Math.max(1,Math.min(6,foot.scale*.12)),0,Math.PI*2);g.fill();}}
+  for(let z=Math.floor(player.z/70)*70+205;z>=player.z+7;z-=70){for(const side of [-1,1]){const x=side*9;const pp=project(x,2,z,c);if(pp){g.fillStyle='#dfc2a6aa';g.font='900 '+Math.max(9,Math.min(19,pp.scale*.58))+'px Arial';g.textAlign='center';g.fillText('DANGER',pp.x,pp.y);}}}
+}
+function drawCircleShadow(cx,cy,rx,ry,a){g.save();g.translate(cx,cy);g.scale(1,ry/rx);let shade=g.createRadialGradient(0,0,rx*.03,0,0,rx);shade.addColorStop(0,'#000000c0');shade.addColorStop(1,'#00000000');g.globalAlpha=a;g.fillStyle=shade;g.beginPath();g.arc(0,0,rx,0,Math.PI*2);g.fill();g.restore();}
+// Zombies: original procedural vector figures with human proportions, ragged garments and facial details.
+function zombie(e,c){let p=project(e.x,0,e.z,c);if(!p)return;let k=clamp(p.scale*2.8/224,.015,1.7);if(k<.06)return;g.save();drawCircleShadow(p.x,p.y,k*46,k*14,.46);g.translate(p.x,p.y);g.scale(k,k);const v=e.variant||0,step=Math.sin(e.step)*11,sway=Math.sin(e.step*.55+e.wiggle)*4,coats=['#626853','#4c5653','#705c4e','#465964'],skins=['#9faaa0','#8b9e83','#a5a899','#96a28d'];const coat=coats[v],skin=skins[v];
+  function path(pts,color){g.beginPath();pts.forEach((pt,i)=>i?g.lineTo(pt[0],pt[1]):g.moveTo(pt[0],pt[1]));g.closePath();g.fillStyle=color;g.fill();}
+  // Legs and worn footwear.
+  path([[-24,-88],[-5,-88],[-6,-48],[-11,-15],[-30,-14],[-30,-45]],'#292d32');path([[5,-88],[24,-88],[32,-42],[27,-13],[11,-13],[4,-49]],'#34363a');
+  path([[-31,-17],[-7,-19],[-3,-6],[-35,-6]],'#191c20');path([[11,-18],[31,-17],[42,-6],[10,-6]],'#191c20');
+  path([[-23+step*.34,-12],[-6+step*.34,-13],[-4+step*.35,0],[-27+step*.35,0]],'#282c2d');path([[8-step*.34,-13],[31-step*.34,-12],[33-step*.3,0],[6-step*.3,0]],'#27282b');
+  // Torso with torn seams and one shoulder forward.
+  let coatgrad=g.createLinearGradient(-38,-160,35,-87);coatgrad.addColorStop(0,'#313b37');coatgrad.addColorStop(.46,coat);coatgrad.addColorStop(1,'#242b2b');path([[-31+sway,-157],[19+sway,-161],[35,-134],[26,-82],[-28,-83],[-37,-126]],coatgrad);
+  path([[-21,-152],[-7,-139],[0,-159],[9,-148],[2,-118],[-13,-117]],'#a2a797');path([[-9,-138],[6,-143],[11,-88],[-7,-89]],'#56514e');
+  path([[-37,-110],[-13,-111],[-27,-97],[-34,-86]],'#34332c');path([[24,-117],[33,-111],[37,-101],[17,-94]],'#494b43');
+  // Arms, bent forward like a running attacker.
+  g.lineCap='round';g.lineJoin='round';g.strokeStyle='#404b46';g.lineWidth=19;g.beginPath();g.moveTo(-25+sway,-146);g.lineTo(-44-step*.4,-113);g.lineTo(-52-step*.55,-88);g.moveTo(22+sway,-145);g.lineTo(42+step*.4,-120);g.lineTo(56+step*.5,-93);g.stroke();
+  g.strokeStyle=skin;g.lineWidth=12;g.beginPath();g.moveTo(-48-step*.5,-101);g.lineTo(-54-step*.5,-83);g.moveTo(53+step*.5,-105);g.lineTo(58+step*.5,-88);g.stroke();
+  // Long claws/fingers silhouetted against the road.
+  g.strokeStyle='#b5bca0';g.lineWidth=3;for(let side of [-1,1]){for(let j=0;j<3;j++){let x=side*(55+Math.sin(e.step)*5)+j*side*3;g.beginPath();g.moveTo(x,-86);g.lineTo(x+side*3,-77+j*2);g.stroke();}}
+  // Neck & head, off-center with shaded jaw.
+  path([[-10,-165],[10,-166],[13,-150],[-11,-148]],skin);g.save();g.translate(sway*.8,-183);g.rotate(Math.sin(e.step*.6)*.05);
+  let face=g.createLinearGradient(-24,-218,25,-166);face.addColorStop(0,'#b7bfb0');face.addColorStop(.5,skin);face.addColorStop(1,'#52655b');g.fillStyle=face;g.beginPath();g.ellipse(0,-8,22,29,-.07,0,Math.PI*2);g.fill();
+  // Sparse messy hair; hollow eyes; irregular mouth with visible teeth.
+  path([[-24,-18],[-22,-31],[-12,-40],[-5,-33],[6,-37],[16,-31],[23,-17],[12,-25],[-4,-25],[-16,-22]],'#2c2f2a');
+  g.fillStyle='#292925';g.beginPath();g.ellipse(-9,-10,7,5,.18,0,Math.PI*2);g.ellipse(9,-10,7,5,-.14,0,Math.PI*2);g.fill();
+  g.fillStyle='#e99a69';g.fillRect(-11,-11,3,2);g.fillRect(8,-11,3,2);g.fillStyle='#4e4840';g.beginPath();g.ellipse(1,6,10,6,.1,0,Math.PI*2);g.fill();
+  g.fillStyle='#e7d9ae';for(let tx of [-5,0,5])g.fillRect(tx,2,3,3);
+  g.strokeStyle='#6a6e64';g.lineWidth=2;g.beginPath();g.moveTo(-7,-2);g.lineTo(-13,2);g.moveTo(13,-3);g.lineTo(16,7);g.stroke();g.restore();
+  // Torn fabric highlights and scratches.
+  g.strokeStyle='#afaa8f';g.lineWidth=2;for(let i=0;i<4;i++){g.beginPath();g.moveTo(-20+i*12,-121+i%2*13);g.lineTo(-13+i*12,-113+i%2*15);g.stroke();}
+  g.restore();}
+function hazard(e,c){let p=project(e.x,0,e.z,c);if(!p)return;let k=clamp(p.scale*.84,.1,94);drawCircleShadow(p.x,p.y,k*1.7,k*.55,.65);g.save();g.translate(p.x,p.y);
+ if(e.type==='cone'){g.fillStyle='#ed772f';g.beginPath();g.moveTo(-k*.5,-k*.05);g.lineTo(0,-k*1.75);g.lineTo(k*.5,-k*.05);g.closePath();g.fill();g.fillStyle='#eee7d3';g.fillRect(-k*.29,-k*.72,k*.58,k*.2);g.fillStyle='#333633';g.fillRect(-k*.7,-k*.12,k*1.4,k*.18);}
+ else if(e.type==='barricade'){g.fillStyle='#1e2424';g.fillRect(-k*1.5,-k*1.1,k*3,k*1.2);g.fillStyle='#e19b49';g.fillRect(-k*1.35,-k*.95,k*2.7,k*.7);g.save();g.beginPath();g.rect(-k*1.35,-k*.95,k*2.7,k*.7);g.clip();g.strokeStyle='#272e2d';g.lineWidth=k*.35;for(let x=-k*1.8;x<k*2.2;x+=k*.8){g.beginPath();g.moveTo(x,-k*1.05);g.lineTo(x+k*.75,-k*.2);g.stroke();}g.restore();g.fillStyle='#252c2f';g.fillRect(-k*1.16,-k*.04,k*.22,k*.35);g.fillRect(k*.93,-k*.04,k*.22,k*.35);}
+ else {let grad=g.createLinearGradient(-k*2,-k*2,k*1,k*.5);grad.addColorStop(0,'#7c8482');grad.addColorStop(.52,'#4a555a');grad.addColorStop(1,'#20292b');g.fillStyle=grad;g.beginPath();g.moveTo(-k*1.8,-k*.28);g.lineTo(-k*1.5,-k*1.05);g.lineTo(-k*.6,-k*1.5);g.lineTo(k*.7,-k*1.5);g.lineTo(k*1.5,-k*.8);g.lineTo(k*1.65,-k*.2);g.closePath();g.fill();g.fillStyle='#152226';g.fillRect(-k*.57,-k*1.35,k*1.02,k*.47);g.fillStyle='#eb925a';g.fillRect(-k*1.55,-k*.5,k*.38,k*.22);g.fillRect(k*1.2,-k*.5,k*.35,k*.22);g.fillStyle='#1a1c20';g.beginPath();g.arc(-k*.99,-k*.15,k*.34,0,7);g.arc(k*.96,-k*.15,k*.34,0,7);g.fill();}g.restore();}
+function drawBall(c){let p=project(player.x,RADIUS,player.z,c);if(!p)return;const r=clamp(p.scale*RADIUS,21,142);let floor=project(player.x,.05,player.z,c);if(floor)drawCircleShadow(floor.x,floor.y,r*1.75,r*.52,.7);
+ let grad=g.createRadialGradient(p.x-r*.35,p.y-r*.4,r*.05,p.x+r*.2,p.y+r*.17,r*1.2);grad.addColorStop(0,'#e0faff');grad.addColorStop(.21,'#94c8d0');grad.addColorStop(.45,'#426b7b');grad.addColorStop(.79,'#1c3749');grad.addColorStop(1,'#0a1624');g.fillStyle=grad;g.beginPath();g.arc(p.x,p.y,r,0,Math.PI*2);g.fill();g.lineWidth=Math.max(2,r*.04);g.strokeStyle='#d4ffb265';g.stroke();
+ g.save();g.translate(p.x,p.y);g.rotate(player.spin);g.strokeStyle='#d1e7dd6a';g.lineWidth=r*.12;g.beginPath();g.ellipse(0,0,r*.85,r*.28,0,0,Math.PI*2);g.stroke();g.rotate(1.7);g.beginPath();g.ellipse(0,0,r*.9,r*.38,0,0,Math.PI*2);g.stroke();g.restore();
+ const glint=g.createRadialGradient(p.x-r*.38,p.y-r*.4,0,p.x-r*.38,p.y-r*.4,r*.55);glint.addColorStop(0,'#ffffffbb');glint.addColorStop(1,'#ffffff00');g.fillStyle=glint;g.beginPath();g.arc(p.x-r*.38,p.y-r*.4,r*.55,0,Math.PI*2);g.fill();}
+function drawEffects(c){for(const e of effects){let p=project(e.x,e.y,e.z,c);if(!p)continue;g.globalAlpha=clamp(e.life*1.7,0,1);g.fillStyle=e.color;g.beginPath();g.arc(p.x,p.y,clamp(p.scale*.09,1,8),0,Math.PI*2);g.fill();}g.globalAlpha=1;}
+function draw(){g.save();if(shake>0)g.translate(between(-shake,shake)*.55,between(-shake,shake)*.35);background();let c=camera();drawRoad(c);const visible=world.filter(e=>e.z>player.z-18&&e.z<player.z+145&&!(e.hit||e.dead)).sort((a,b)=>b.z-a.z);for(const e of visible){if(e.type==='zombie')zombie(e,c);else hazard(e,c);}drawEffects(c);drawBall(c);g.restore();
+ if(phase==='running'&&energy<30){g.save();g.globalAlpha=.1+.08*Math.sin(clock*9);g.fillStyle='#e44442';g.fillRect(0,0,W,H);g.restore();}}
+function animate(ms){let dt=Math.min(.035,(ms-prev)/1000||.016);prev=ms;if(phase!=='paused'){let parts=Math.max(1,Math.ceil(dt/.011));for(let i=0;i<parts;i++)update(dt/parts);}draw();requestAnimationFrame(animate)}
+addEventListener('keydown',e=>{if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code))e.preventDefault();if(e.code==='KeyR'&&!e.repeat){reset();return;}if(e.code==='KeyP'&&!e.repeat){if(phase==='running'){pausedFrom=phase;phase='paused';ui.state.textContent='PAUSED · PRESS P';showToast('PAUSED',999);}else if(phase==='paused'){phase=pausedFrom;ui.state.textContent='SURVIVE THE HIGHWAY';toastTime=0;}return;}if(e.code==='Space'&&phase==='ready'&&!e.repeat){charging=true;ui.center.hidden=true;}input.add(e.code);});
+addEventListener('keyup',e=>{if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code))e.preventDefault();input.delete(e.code);if(e.code==='Space'&&phase==='ready'&&charging)launch();});addEventListener('blur',()=>{input.clear();if(phase==='ready'&&charging){charging=false;power=0;ui.powerwrap.style.opacity='0';ui.center.hidden=false;}else if(phase==='running'){phase='paused';pausedFrom='running';ui.state.textContent='PAUSED · PRESS P';showToast('PAUSED',999);}});
+reset();requestAnimationFrame(animate);
+</script>
+</body></html>
