@@ -23,7 +23,6 @@ ChatGPT was used throughout the development of this project.
 - Used Visual Studio Code to manage and edit project files.
 - Tested the game in a browser and evaluated the results.
 - Organized the final project using GitHub.
-- Generated HTML, CSS, and JavaScript game code.
 
 ## Limitations
 
