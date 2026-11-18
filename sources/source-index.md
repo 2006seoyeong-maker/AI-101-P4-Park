@@ -18,4 +18,4 @@ Permission: Original sketch created by the student.
 No external images, sounds, or third-party libraries are planned for the initial build.
 
 ## 4. AI Assistance
-ChatGPT assisted with organizing the project plan, PRD, and ADRs. AI assistance will be documented in the AI Use Log.
+ChatGPT assisted with organizing the project plan.
