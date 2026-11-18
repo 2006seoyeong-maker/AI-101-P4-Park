@@ -1,85 +1,130 @@
-# Physics Ball — Product Requirements Document
+# Dead Road: Ricochet Evolution V5 — Product Requirements Document
 
 ## 1. Goal
-Create a simple 3D-style physics puzzle game where players launch a ball and use gravity, momentum, and directional control to reach a target platform.
 
-## 2. User
-A college student who enjoys interactive physics challenges.
+Create a browser-based endless zombie survival game where the player controls a rolling ball, defeats enemies through collisions, avoids dangerous obstacles, collects power-ups, and survives as long as possible.
+
+The game should combine physics-inspired movement, fast-paced combat, evolving environments, and satisfying visual feedback.
+
+## 2. Target User
+
+College students and casual gamers who enjoy arcade action, survival challenges, and games with upgrades and special abilities.
+
+The player should feel excitement, speed, and a sense of progression during gameplay.
 
 ## 3. Core Features
 
-### Feature 1: Ball Launching
-- The user can hold Space to charge launching power.
-- A power meter shows the charging level.
-- Releasing Space launches the ball.
-- Higher power creates greater initial speed.
+### Feature 1: Movement and Survival
 
-### Feature 2: Physics-Based Movement
-- The user can use arrow keys to influence the ball's movement.
-- Left and Right apply sideways forces.
-- Up applies a small forward force.
-- Down reduces forward speed.
-- Gravity, momentum, and friction affect movement.
-- A third-person camera follows the ball from behind.
+- The user can hold and release Space to launch the ball.
+- The ball continues moving forward after launch.
+- The user can steer with A and D.
+- W and S adjust movement speed.
+- Holding Shift activates a temporary speed boost.
+- The player must avoid obstacles and manage survival energy.
+- The game ends when survival energy reaches zero.
+- The user can restart with R.
 
-### Feature 3: Mission and Restart
-- The user can navigate a ramp and jump across a gap.
-- Landing on the target platform completes the mission.
-- Falling off the course results in failure.
-- Pressing R restarts the level.
+### Feature 2: Combat and Special Abilities
 
-## 4. What Happens
-1. The ball starts at the beginning of the course.
-2. The player holds Space to charge power.
-3. Releasing Space launches the ball forward.
-4. The ball moves across the course using simplified physics.
-5. The player adjusts its direction using arrow keys.
-6. Reaching the target platform results in victory.
-7. Falling off the course results in failure.
+- Zombies continuously appear along the road.
+- The game includes ten different enemy or character types.
+- The player can defeat hostile zombies by colliding with them.
+- Certain protected targets must not be attacked.
+- Destroying enemies increases the score and kill count.
+- Successful attacks display impact effects, particles, score pop-ups, and combo feedback.
+- Pressing Q activates Ricochet Rampage.
+- Ricochet Rampage makes the ball bounce between nearby enemies and obstacles, destroying valid targets.
+- The skill has a cooldown to prevent continuous use.
+
+### Feature 3: Items, Upgrades, and Progression
+
+- The user can collect items that provide temporary benefits.
+- Power-ups can improve speed, protection, combat abilities, or scoring.
+- The ball begins with a neutral metallic appearance.
+- Its appearance changes when upgrades or special effects are active.
+- Collecting seven Prism Cores activates temporary invincibility.
+- The road contains changing environments, terrain, and obstacles.
+- The game tracks survival progress through distance, kills, score, and combos.
+
+## 4. Gameplay Flow
+
+1. The player starts with a neutral-colored ball.
+2. The player charges and launches the ball using Space.
+3. The ball moves continuously along the road.
+4. The player steers using WASD and accelerates with Shift.
+5. Zombies, obstacles, and collectible items appear during gameplay.
+6. The player destroys hostile enemies while avoiding protected targets.
+7. Collecting items temporarily improves the ball's abilities.
+8. The player can activate Ricochet Rampage when its cooldown is complete.
+9. Collecting seven Prism Cores grants temporary invincibility.
+10. The game continues until the player's survival energy reaches zero.
+11. The player can restart and attempt to achieve a higher score.
 
 ## 5. Look and Feel
-- A simple 3D-style environment.
-- A third-person camera following closely behind the ball.
-- The ball appears near the bottom center of the screen.
-- Clean platforms, ramps, and obstacles.
-- A visible launching power meter.
-- Smooth animations and clear visual feedback.
 
-## 6. Out of Scope
-- Multiplayer gameplay.
-- Multiple levels in the first version.
-- Advanced realistic physics.
-- Online accounts and leaderboards.
-- AI-controlled opponents.
-- Complex character customization.
+- Stylized 2.5D graphics with a sense of depth.
+- Third-person camera following the rolling ball.
+- Dark, post-apocalyptic road environments.
+- Different zombie appearances and behaviors.
+- Changing environmental scenery and road obstacles.
+- A neutral metallic ball that evolves visually through power-ups.
+- Bright particle effects, impact animations, and motion trails.
+- Screen shake and visual feedback during powerful collisions.
+- Large score pop-ups and visible combo indicators.
+- A clear HUD showing survival energy, score, kills, distance, and ability status.
 
-## 7. Done When
+## 6. Controls
 
-1. The game opens in a browser from build/index.html and displays the ball, course, and power meter.
+| Key | Function |
+|---|---|
+| Space | Charge and launch the ball |
+| W / S | Adjust speed |
+| A / D | Steer left and right |
+| Shift | Activate speed boost |
+| Q | Activate Ricochet Rampage |
+| R | Restart |
+| P | Pause |
+| M | Toggle sound |
 
-2. Holding and releasing Space launches the ball with variable power, and arrow keys affect its movement while preserving momentum.
+## 7. Out of Scope
 
-3. The game detects victory and failure correctly, and pressing R restarts the game.
-## Cycle 2: Zombie Survival Update
+- Online multiplayer.
+- Online accounts or authentication.
+- Global leaderboards.
+- Photorealistic 3D graphics.
+- Advanced realistic physics simulation.
+- Online save synchronization.
+- AI-controlled cooperative players.
 
-### Reason for Change
-The original Physics Ball game was too short and simple for the intended experience. I decided to explore a continuous survival game instead of a short physics puzzle.
+## 8. Success Criteria — Done When
 
-### Updated Goal
-Create an endless zombie survival game where the player controls a continuously moving ball, defeats approaching zombies through collisions, and avoids road obstacles.
+**Check 1: Basic Gameplay**
 
-### Updated Features
-1. The ball continues moving forward after the initial launch.
-2. Zombies continuously appear and approach the player.
-3. The player defeats zombies by colliding with them.
-4. Obstacles appear on the road and reduce survival energy when hit.
-5. Defeating zombies restores survival energy.
-6. The game tracks kills, distance, and survival status.
+The game opens directly from `build/index.html`. The player can launch the ball, steer using WASD, activate Shift boost, and restart the game.
 
-### Updated Success Criteria
-1. The game runs continuously after the initial launch without requiring another launch.
-2. Zombie collisions increase the kill count and restore survival energy.
-3. Obstacle collisions reduce survival energy, and the game ends when energy reaches zero.
+**Check 2: Combat and Survival**
 
-### Scope Change
-The original target-platform goal is replaced by endless survival. This is a new design direction, not a fix supported by a documented Cycle 1 failure.
+Hostile zombies and obstacles appear during gameplay. Collisions affect the game state, scores update correctly, and survival energy determines when the game ends.
+
+**Check 3: Special Abilities and Progression**
+
+Ricochet Rampage activates with Q, targets valid enemies and obstacles, and respects its cooldown. Collecting seven Prism Cores activates temporary invincibility, and upgrades visibly affect the ball.
+
+## 9. Development History
+
+**Cycle 1:** Created a simple physics puzzle game focused on launching a ball toward a target.
+
+**Cycle 2:** Changed the game into an endless zombie survival experience, adding continuous movement, enemies, obstacles, and survival energy.
+
+**Additional Versions 3–5:** Expanded combat, movement controls, item collection, visual effects, special abilities, and ball customization.
+
+Major design changes are documented in the `decisions/` folder.
+
+## 10. Known Limitations
+
+- The game uses stylized 2.5D graphics rather than full 3D rendering.
+- Physics and collisions are simplified.
+- Visual effects may reduce performance on lower-powered devices.
+- Game balance may require further adjustment.
+- Not all V5 mechanics have been fully verified through documented gameplay tests.
