@@ -4,9 +4,13 @@
 
 **Project:** AI 101 Project 4 — Vibe Coding
 
-**Game:** Physics Ball / Dead Road
+**Game:** Physics Ball / Dead Road: Ricochet Evolution V5
 
-**Purpose:** Compare the original game with the revised version using the same four tests.
+**AI Tool:** ChatGPT
+
+**Development Tools:** Visual Studio Code, GitHub, Google Chrome / Microsoft Edge
+
+**Purpose:** Test the original game, compare it with the revised version, and document the design changes and remaining limitations.
 
 ## 2. Cycle 1 and Cycle 2 Test Results
 
@@ -17,57 +21,69 @@
 | Test 3: Movement | Movement controls respond | Pass | Pass | Unchanged |
 | Test 4: Restart | R restarts the game | Pass | Pass | Unchanged |
 
-These results summarize the basic functional checks. Each pass should be supported by its corresponding test evidence.
+The four basic functionality tests passed in both versions, based on my gameplay checks.
+
+These results show that the original controls remained functional after the revision.
 
 ## 3. Main Design Limitation
 
-The original Physics Ball game had a short course and limited replay value.
+The original Physics Ball game was a short physics puzzle where the player launched a ball toward a target platform.
 
-I decided to change the gameplay into an endless survival experience with zombies, obstacles, and scoring.
+Although the basic controls worked, I felt that the game was too simple and had limited replay value.
 
-This was a design decision based on my evaluation of the game, rather than a failure identified by the four functional tests.
+The main limitation was not a technical failure. It was a gameplay design issue that I identified while reviewing the first version.
 
-## 4. Design Revision
+I wanted to make the game more engaging, challenging, and replayable.
 
-**Related Decision:** ADR-003
+## 4. Design Revision — Cycle 2
 
-The revised game introduced:
+**Related Decision:** ADR-003 — Endless Zombie Survival
+
+I decided to change the game from a short physics puzzle into an endless zombie survival experience.
+
+The revised version introduced:
+
 - Continuous forward movement.
-- Approaching zombies.
-- Collision-based attacks.
+- Approaching zombie enemies.
+- Collision-based combat.
 - Road obstacles.
 - Survival energy and scoring.
+- Longer gameplay without a fixed finish line.
+
+**Result:**
+
+The revised game introduced new survival mechanics while retaining the basic movement and restart functions.
+
+However, the four original functional tests did not directly measure whether the gameplay became more enjoyable.
 
 ## 5. Cycle 2 Evaluation
 
-The revised game retained the basic controls and introduced additional gameplay systems.
+The same four basic tests were used to compare the original and revised versions.
 
-The four functional tests did not demonstrate an improvement because the tested functions worked in both versions.
+All four recorded results remained unchanged because the basic functions worked in both versions.
 
-Further gameplay testing would be needed to evaluate whether the new survival mechanics improved the overall experience.
+This comparison shows that the revision retained the tested controls, but it does not prove that every new gameplay mechanic worked correctly.
 
-## 6. Additional Development — V3 to V5
+Additional gameplay testing would be necessary to evaluate difficulty, replayability, and player satisfaction.
 
-Later versions introduced:
-- WASD controls and Shift boost.
-- Ten zombie types.
-- Power-ups and changing ball designs.
-- Ricochet Rampage combat skill.
-- Seven Prism Core collectibles for temporary invincibility.
+## 6. Additional Development — Versions 3 to 5
 
-These features require separate testing and should not be considered verified by the original Cycle 1 and Cycle 2 tests.
+**Related Decision:** ADR-004 — Gameplay Expansion and Visual Improvements
 
-## 7. Known Limitations
+After Cycle 2, I continued developing the game to improve its gameplay variety and visual feedback.
 
-- Simplified physics and 2.5D graphics.
-- Gameplay balance needs additional testing.
-- Visual effects may affect performance.
-- The latest V5 features are not fully verified.
+The later versions introduced:
 
-## 8. Evidence
+- WASD movement controls.
+- Shift speed boost.
+- Ten different zombie types.
+- Changing environments and road obstacles.
+- Collectible items and power-ups.
+- Ball appearance changes based on upgrades.
+- Ricochet Rampage, a special skill that bounces between enemies and obstacles.
+- Skill cooldowns.
+- Stronger collision effects, particles, and score animations.
+- A Prism Core system that grants temporary invincibility after collecting seven cores.
 
-Screenshots should be stored in `build-record/tests/`.
+The final selected version is Dead
 
-Each screenshot should identify the test, game version, and actual result.
-
-Only tests that were actually performed should be marked as passed.
